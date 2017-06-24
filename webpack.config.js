@@ -18,6 +18,8 @@ const HOST = process.env.HOST || "localhost";
 const PORT = process.env.PORT || "3000"
 
 const config = {
+	// Don't attempt to continue if there are any errors.
+	bail: true,
 	context: paths.appSrc,
 	entry: {
 		app: [
