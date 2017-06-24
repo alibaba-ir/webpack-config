@@ -1,6 +1,5 @@
 const paths = require("./paths");
 
-// Load environment variables starts with STORYBOOK_ to the client side.
 function loadEnv(options = {}) {
 	const defaultNodeEnv = options.production ? 'production' : 'development';
 	const env = {
@@ -11,10 +10,6 @@ function loadEnv(options = {}) {
 		// In development this is just empty as we always serves from the root.
 		PUBLIC_URL: JSON.stringify(options.production ? '.' : ''),
 	};
-
-	Object.keys(process.env).filter(name => /^STORYBOOK_/.test(name)).forEach(name => {
-		env[name] = JSON.stringify(process.env[name]);
-	});
 
 	return {
 		'process.env': env,
