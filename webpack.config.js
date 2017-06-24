@@ -41,7 +41,7 @@ const config = {
 		sourceMapFilename: '[file].map',
 		library: '__init__',
 		libraryTarget: 'this',
-		devtoolModuleFilenameTemplate: '/[resource-path]',
+		devtoolModuleFilenameTemplate: '/[absolute-resource-path]',
 	},
 	devtool: process.env.NODE_ENV !== "production" ? "cheap-module-source-map" : "",
 	resolve: {

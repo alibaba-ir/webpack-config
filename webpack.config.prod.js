@@ -44,7 +44,7 @@ const config = {
 		sourceMapFilename: '[file].map',
 		library: '__init__',
 		libraryTarget: 'this',
-		devtoolModuleFilenameTemplate: '/[resource-path]',
+		devtoolModuleFilenameTemplate: '/[absolute-resource-path]',
 	},
 	devtool: 'source-map',
 	resolve: {
