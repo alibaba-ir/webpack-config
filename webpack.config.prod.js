@@ -4,10 +4,11 @@ const paths = require('./webpack/paths');
 
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CaseSensitivePathsPlugin = require("case-sensitive-paths-webpack-plugin");
-const WatchMissingNodeModulesPlugin = require('./webpack/WatchMissingNodeModulesPlugin');
+const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeModulesPlugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
+const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const env = require('./webpack/env');
 
 const alias = require('./webpack/alias');
@@ -30,20 +31,16 @@ const config = {
 	// Don't attempt to continue if there are any errors.
 	bail: true,
 	context: paths.appSrc,
-	entry: {
-		app: [
-			"babel-polyfill",
-			"./index.js"
-		]
-	},
+	entry: [
+		require.resolve('./webpack/polyfills'),
+		paths.appIndexJs
+	],
 	output: {
 		path: paths.appBuild,
 		publicPath: publicPath,
 		filename: 'static/js/[name].[hash:8].js',
 		chunkFilename: 'static/js/[name].[chunkhash:8].chunk.js',
 		sourceMapFilename: '[file].map',
-		library: '__init__',
-		libraryTarget: 'this',
 		devtoolModuleFilenameTemplate: '/[absolute-resource-path]',
 	},
 	devtool: 'source-map',
@@ -51,8 +48,17 @@ const config = {
 		modules: ['node_modules'].concat(paths.appNodeModules),
 		extensions: ['.js', '.json', '.jsx', ".sass", ".scss"],
 		alias: alias,
+		plugins: [
+			// Prevents users from importing files from outside of src/ (or node_modules/).
+			// This often causes confusion because we only process files within src/ with babel.
+			// To fix this, we prevent you from importing files out of src/ -- if you'd like to,
+			// please link the files into your node_modules/ and let module-resolution kick in.
+			// Make sure your source files are compiled, as they will not be processed in any way.
+			new ModuleScopePlugin(paths.appSrc),
+		],
 	},
 	module: {
+		strictExportPresence: true,
 		rules: [
 			...loaders
 		]
@@ -60,17 +66,11 @@ const config = {
 	plugins: [
 		new CaseSensitivePathsPlugin(),
 		new WatchMissingNodeModulesPlugin(paths.appNodeModules),
-		new webpack.ProgressPlugin(),
 
 		new webpack.DefinePlugin(env()),
-		new webpack.HotModuleReplacementPlugin(),
 		// enable HMR globally
+		new webpack.HotModuleReplacementPlugin(),
 
-		new webpack.NamedModulesPlugin(),
-		// prints more readable module names in the browser console on HMR updates
-
-		new webpack.NoEmitOnErrorsPlugin(),
-		// do not emit compiled assets that include errors
 		new HtmlWebpackPlugin({
 			inject: true,
 			template: paths.appHtml,

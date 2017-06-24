@@ -44,8 +44,7 @@ const loaders = [
 			{
 				loader: "babel-loader",
 				options: {
-					presets: ["alibaba", "react-hmre"],
-					plugins: ["react-hot-loader/babel"],
+					presets: ["alibaba"],
 					cacheDirectory: findCacheDir({name: "cache-directory"}),
 					ignore: /node_modules/,
 					babelrc: false
