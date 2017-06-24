@@ -1,0 +1,23 @@
+---
+language: node_js
+node_js:
+  - 4
+  - stable
+cache:
+  npm: true
+  directories:
+  - node_modules
+env:
+  - NODE_ENV=development
+  - NODE_ENV=production
+matrix:
+  allow_failures:
+    - env: NODE_ENV=production
+  fast_finish: true
+install:
+  - npm install --production=false
+before_script:
+  - if [ "${NODE_ENV}" = "production" ]; then npm run build; fi
+script:
+  - npm run lint
+  - npm run test
