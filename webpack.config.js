@@ -67,7 +67,7 @@ const config = {
 		host: HOST,
 		hot: true,
 		quiet: false,
-		overlay:true,
+		overlay: true,
 		stats: {
 			colors: true
 		},
